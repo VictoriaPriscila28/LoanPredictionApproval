@@ -1,6 +1,7 @@
 # 📦 Streamlit App Starter Kit 
 ```
-⬆️ (Replace above with your app's name)
+⬆️ Projeto para a disciplina de 
+Inteligência Artificial
 ```
 
 Description of the app ...
