@@ -1,5 +1,6 @@
 import streamlit as st
 
-st.title('🎈 App Name')
+st.title('🎈 Projeto para a disciplina de Inteligência Artificial')
 
-st.write('Hello world!')
+st.write('Este projeto tem como intuito fazer a análise preditiva\n'
+         'da aprovação de empréstimos.')
