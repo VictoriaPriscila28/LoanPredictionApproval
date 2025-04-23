@@ -1,5 +1,12 @@
 import streamlit as st
-
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
+from sklearn.metrics import accuracy_score
+import pickle
 st.title('🎈 Projeto para a disciplina de Inteligência Artificial')
 
 st.write('Este projeto tem como intuito fazer a análise preditiva\n'
