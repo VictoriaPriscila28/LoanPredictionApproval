@@ -1,41 +1,49 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier, export_text, plot_tree
-from sklearn.metrics import accuracy_score
 import pickle
+import numpy as np
+
 st.title('🎈 Projeto para a disciplina de Inteligência Artificial')
 
 st.write('Este projeto tem como intuito fazer a análise preditiva\n'
          'da aprovação de empréstimos.')
 
-# Inputs do usuário com novas variáveis
+# Carrega o modelo e o scaler
+model = pickle.load(open("best_loan_model2.pkl", "rb"))
+scaler = pickle.load(open("scaler.pkl", "rb"))
 
-no_of_dependents = st.selectbox('Número de Dependentes', [0, 1, 2, 3])
-education = st.selectbox('Graduado?', [0, 1])  # 0 = Graduate, 1 = Not Graduate
-self_employed = st.selectbox('Autônomo?', [0, 1])
-income_annum = st.number_input('Renda Anual do Solicitante', min_value=0)
-loan_amount = st.number_input('Valor do Empréstimo', min_value=0)
-loan_term = st.number_input('Prazo do Empréstimo (em meses)', min_value=0)
-cibil_score = st.selectbox('Histórico de Crédito (CIBIL Score)', [0, 1])
-residential_assets_value = st.number_input('Valor dos Bens Residenciais', min_value=0)
-commercial_assets_value = st.number_input('Valor dos Bens Comerciais', min_value=0)
-luxury_assets_value = st.number_input('Valor dos Bens de Luxo', min_value=0)
-bank_asset_value = st.number_input('Valor dos Bens Bancários', min_value=0)
+st.title("Simulador de Aprovação de Empréstimo")
 
+# Inputs do usuário
+no_of_dependents = st.number_input("Número de dependentes", min_value=0)
+education = st.selectbox("Educação", ["Graduado", "Não graduado"])
+self_employed = st.selectbox("Autônomo", ["Sim", "Não"])
+income_annum = st.number_input("Renda anual")
+loan_amount = st.number_input("Valor do empréstimo")
+loan_term = st.number_input("Prazo do empréstimo (meses)")
+cibil_score = st.number_input("Pontuação CIBIL")
+residential_assets_value = st.number_input("Valor dos ativos residenciais")
+commercial_assets_value = st.number_input("Valor dos ativos comerciais")
+luxury_assets_value = st.number_input("Valor dos ativos de luxo")
+bank_asset_value = st.number_input("Valor do ativo bancário")
 
-# Quando o botão for clicado
-if st.button('Verificar Aprovação'):
-    input_usuario = np.array([[gender, married, dependents, education, self_employed,
-                               renda, co_renda, loan_amount, loan_term,
-                               credit_history, property_area]])
+# Transformações categóricas para numéricas (como no LabelEncoder original)
+education = 1 if education == "Graduado" else 0
+self_employed = 1 if self_employed == "Sim" else 0
 
-    resultado = modelo.predict(input_usuario)
+# Cria o array de entrada
+input_data = np.array([[
+    no_of_dependents, education, self_employed, income_annum, loan_amount,
+    loan_term, cibil_score, residential_assets_value,
+    commercial_assets_value, luxury_assets_value, bank_asset_value
+]])
 
-    if resultado[0] == 1:
-        st.success('✅ Empréstimo Aprovado!')
+# Aplica o scaler
+input_scaled = scaler.transform(input_data)
+
+# Predição
+if st.button("Verificar Aprovação"):
+    prediction = model.predict(input_scaled)
+    if prediction[0] == 1:
+        st.success("✅ Empréstimo Aprovado!")
     else:
-        st.error('❌ Empréstimo Negado.')
+        st.error("❌ Empréstimo Não Aprovado.")
