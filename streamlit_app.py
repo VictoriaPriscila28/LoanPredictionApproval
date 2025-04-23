@@ -11,10 +11,11 @@ import plotly.express as px
 model = pickle.load(open("best_loan_model.pkl", "rb"))
 scaler = pickle.load(open("scaler.pkl", "rb"))
 
-# MongoDB
-client = MongoClient("mongodb+srv://admin:admin@cluster0.evsh2.mongodb.net//")
+#Mongo
+client = MongoClient("mongodb+srv://admin:admin@cluster0.evsh2.mongodb.net/")
 db = client["db_docker"]
 collection = db["db_docker_financeiro"]
+
 
 # Página
 st.title("🔍 Preditor de Aprovação de Empréstimo")
